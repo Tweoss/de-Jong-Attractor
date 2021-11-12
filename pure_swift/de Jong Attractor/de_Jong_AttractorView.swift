@@ -34,6 +34,7 @@ class PongView: ScreenSaverView {
     // private let paddleBottomOffset: CGFloat = 100
     // private let paddleSize = NSSize(width: 60, height: 20)
     private var colored_points: [ColoredPoint] = []
+    private var i: Double = 0.0
     private var a: Double = 0.0
     private var b: Double = -2.0
     private var c: Double = -1.2
@@ -187,7 +188,9 @@ class PongView: ScreenSaverView {
             p in
             return transformPoint(p, a, b, c, d)
         }
-        a = -2.0 + sin( Date().timeIntervalSince1970 / 5000)
+        i += 1.0
+        a = -2.0 + sin( i / 100)
+
 
         // let oobAxes = ballIsOOB()
         // if oobAxes.xAxis {
