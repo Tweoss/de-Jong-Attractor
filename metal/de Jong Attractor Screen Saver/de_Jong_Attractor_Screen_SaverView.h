@@ -1,9 +1,8 @@
 //
-//  Attractor_ScreenSaverView.h
-//  Metal-ScreenSaver
+//  de_Jong_Attractor_Screen_SaverView.h
+//  de Jong Attractor Screen Saver
 //
-//  Created by Antoine FEUERSTEIN on 2/18/19.
-//  Copyright © 2019 Antoine FEUERSTEIN. All rights reserved.
+//  Created by Francis Chua on 11/12/21.
 //
 
 #import <ScreenSaver/ScreenSaver.h>
@@ -19,6 +18,10 @@
     id<MTLCommandQueue>             commandQueue;
     
     float                           time;
+    float                           a;
+    float                           b;
+    float                           c;
+    float                           d;
     float                           timespeed;
 }
 

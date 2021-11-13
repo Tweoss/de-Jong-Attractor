@@ -3,25 +3,26 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 48;
+	objectVersion = 55;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C4E8E6F2221AF9BA006DB788 /* Attractor_ScreenSaverView.h in Headers */ = {isa = PBXBuildFile; fileRef = C4E8E6F1221AF9BA006DB788 /* Attractor_ScreenSaverView.h */; };
-		C4E8E6F4221AF9BA006DB788 /* Attractor_ScreenSaverView.m in Sources */ = {isa = PBXBuildFile; fileRef = C4E8E6F3221AF9BA006DB788 /* Attractor_ScreenSaverView.m */; };
-		C4F0CEC2221BF32C002AFADB /* shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = C4F0CEC1221BF32C002AFADB /* shaders.metal */; };
+		80059F67273F5A3900BA2C27 /* de_Jong_Attractor_Screen_SaverView.h in Headers */ = {isa = PBXBuildFile; fileRef = 80059F66273F5A3900BA2C27 /* de_Jong_Attractor_Screen_SaverView.h */; };
+		80059F69273F5A3900BA2C27 /* de_Jong_Attractor_Screen_SaverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 80059F68273F5A3900BA2C27 /* de_Jong_Attractor_Screen_SaverView.m */; };
+		80059F70273F5A7C00BA2C27 /* shader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 80059F6F273F5A7C00BA2C27 /* shader.metal */; };
+		80059F72273F5A9E00BA2C27 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 80059F71273F5A9E00BA2C27 /* Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C4E8E6EE221AF9BA006DB788 /* Metal-ScreenSaver.saver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Metal-ScreenSaver.saver"; sourceTree = BUILT_PRODUCTS_DIR; };
-		C4E8E6F1221AF9BA006DB788 /* Attractor_ScreenSaverView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Attractor_ScreenSaverView.h; sourceTree = "<group>"; };
-		C4E8E6F3221AF9BA006DB788 /* Attractor_ScreenSaverView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Attractor_ScreenSaverView.m; sourceTree = "<group>"; };
-		C4E8E6F5221AF9BA006DB788 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C4F0CEC1221BF32C002AFADB /* shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = shaders.metal; sourceTree = "<group>"; };
+		80059F63273F5A3900BA2C27 /* de Jong Attractor Screen Saver.saver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "de Jong Attractor Screen Saver.saver"; sourceTree = BUILT_PRODUCTS_DIR; };
+		80059F66273F5A3900BA2C27 /* de_Jong_Attractor_Screen_SaverView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = de_Jong_Attractor_Screen_SaverView.h; sourceTree = "<group>"; };
+		80059F68273F5A3900BA2C27 /* de_Jong_Attractor_Screen_SaverView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = de_Jong_Attractor_Screen_SaverView.m; sourceTree = "<group>"; };
+		80059F6F273F5A7C00BA2C27 /* shader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = shader.metal; sourceTree = "<group>"; };
+		80059F71273F5A9E00BA2C27 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		C4E8E6EA221AF9BA006DB788 /* Frameworks */ = {
+		80059F60273F5A3900BA2C27 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -31,131 +32,132 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		C4E8E6E4221AF9BA006DB788 = {
+		80059F59273F5A3900BA2C27 = {
 			isa = PBXGroup;
 			children = (
-				C4E8E6F0221AF9BA006DB788 /* Metal-ScreenSaver */,
-				C4E8E6EF221AF9BA006DB788 /* Products */,
+				80059F65273F5A3900BA2C27 /* de Jong Attractor Screen Saver */,
+				80059F64273F5A3900BA2C27 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		C4E8E6EF221AF9BA006DB788 /* Products */ = {
+		80059F64273F5A3900BA2C27 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C4E8E6EE221AF9BA006DB788 /* Metal-ScreenSaver.saver */,
+				80059F63273F5A3900BA2C27 /* de Jong Attractor Screen Saver.saver */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		C4E8E6F0221AF9BA006DB788 /* Metal-ScreenSaver */ = {
+		80059F65273F5A3900BA2C27 /* de Jong Attractor Screen Saver */ = {
 			isa = PBXGroup;
 			children = (
-				C4E8E6F1221AF9BA006DB788 /* Attractor_ScreenSaverView.h */,
-				C4E8E6F3221AF9BA006DB788 /* Attractor_ScreenSaverView.m */,
-				C4F0CEC1221BF32C002AFADB /* shaders.metal */,
-				C4E8E6F5221AF9BA006DB788 /* Info.plist */,
+				80059F66273F5A3900BA2C27 /* de_Jong_Attractor_Screen_SaverView.h */,
+				80059F68273F5A3900BA2C27 /* de_Jong_Attractor_Screen_SaverView.m */,
+				80059F6F273F5A7C00BA2C27 /* shader.metal */,
+				80059F71273F5A9E00BA2C27 /* Info.plist */,
 			);
-			path = "Metal-ScreenSaver";
+			path = "de Jong Attractor Screen Saver";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		C4E8E6EB221AF9BA006DB788 /* Headers */ = {
+		80059F5E273F5A3900BA2C27 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C4E8E6F2221AF9BA006DB788 /* Attractor_ScreenSaverView.h in Headers */,
+				80059F67273F5A3900BA2C27 /* de_Jong_Attractor_Screen_SaverView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		C4E8E6ED221AF9BA006DB788 /* Metal-ScreenSaver */ = {
+		80059F62273F5A3900BA2C27 /* de Jong Attractor Screen Saver */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C4E8E6F8221AF9BA006DB788 /* Build configuration list for PBXNativeTarget "Metal-ScreenSaver" */;
+			buildConfigurationList = 80059F6C273F5A3900BA2C27 /* Build configuration list for PBXNativeTarget "de Jong Attractor Screen Saver" */;
 			buildPhases = (
-				C4E8E6E9221AF9BA006DB788 /* Sources */,
-				C4E8E6EA221AF9BA006DB788 /* Frameworks */,
-				C4E8E6EB221AF9BA006DB788 /* Headers */,
-				C4E8E6EC221AF9BA006DB788 /* Resources */,
+				80059F5E273F5A3900BA2C27 /* Headers */,
+				80059F5F273F5A3900BA2C27 /* Sources */,
+				80059F60273F5A3900BA2C27 /* Frameworks */,
+				80059F61273F5A3900BA2C27 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = "Metal-ScreenSaver";
-			productName = "Metal-ScreenSaver";
-			productReference = C4E8E6EE221AF9BA006DB788 /* Metal-ScreenSaver.saver */;
+			name = "de Jong Attractor Screen Saver";
+			productName = "de Jong Attractor Screen Saver";
+			productReference = 80059F63273F5A3900BA2C27 /* de Jong Attractor Screen Saver.saver */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		C4E8E6E5221AF9BA006DB788 /* Project object */ = {
+		80059F5A273F5A3900BA2C27 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = 1;
 				LastUpgradeCheck = 1310;
-				ORGANIZATIONNAME = "Antoine FEUERSTEIN";
 				TargetAttributes = {
-					C4E8E6ED221AF9BA006DB788 = {
-						CreatedOnToolsVersion = 9.2;
-						ProvisioningStyle = Automatic;
+					80059F62273F5A3900BA2C27 = {
+						CreatedOnToolsVersion = 13.1;
 					};
 				};
 			};
-			buildConfigurationList = C4E8E6E8221AF9BA006DB788 /* Build configuration list for PBXProject "Metal-ScreenSaver" */;
-			compatibilityVersion = "Xcode 8.0";
+			buildConfigurationList = 80059F5D273F5A3900BA2C27 /* Build configuration list for PBXProject "de Jong Attractor Screen Saver" */;
+			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = C4E8E6E4221AF9BA006DB788;
-			productRefGroup = C4E8E6EF221AF9BA006DB788 /* Products */;
+			mainGroup = 80059F59273F5A3900BA2C27;
+			productRefGroup = 80059F64273F5A3900BA2C27 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				C4E8E6ED221AF9BA006DB788 /* Metal-ScreenSaver */,
+				80059F62273F5A3900BA2C27 /* de Jong Attractor Screen Saver */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		C4E8E6EC221AF9BA006DB788 /* Resources */ = {
+		80059F61273F5A3900BA2C27 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				80059F72273F5A9E00BA2C27 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		C4E8E6E9221AF9BA006DB788 /* Sources */ = {
+		80059F5F273F5A3900BA2C27 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C4F0CEC2221BF32C002AFADB /* shaders.metal in Sources */,
-				C4E8E6F4221AF9BA006DB788 /* Attractor_ScreenSaverView.m in Sources */,
+				80059F70273F5A7C00BA2C27 /* shader.metal in Sources */,
+				80059F69273F5A3900BA2C27 /* de_Jong_Attractor_Screen_SaverView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		C4E8E6F6221AF9BA006DB788 /* Debug */ = {
+		80059F6A273F5A3900BA2C27 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
@@ -178,7 +180,6 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -197,23 +198,25 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MTL_ENABLE_DEBUG_INFO = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
-		C4E8E6F7221AF9BA006DB788 /* Release */ = {
+		80059F6B273F5A3900BA2C27 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
@@ -236,7 +239,6 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -249,34 +251,45 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
 			};
 			name = Release;
 		};
-		C4E8E6F9221AF9BA006DB788 /* Debug */ = {
+		80059F6D273F5A3900BA2C27 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = "Metal-ScreenSaver/Info.plist";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSPrincipalClass = de_Jong_Attractor_Screen_SaverView;
 				INSTALL_PATH = "$(HOME)/Library/Screen Savers";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.z-zero.day01.Metal-ScreenSaver";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "tweoss.de-Jong-Attractor-Screen-Saver";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				WRAPPER_EXTENSION = saver;
 			};
 			name = Debug;
 		};
-		C4E8E6FA221AF9BA006DB788 /* Release */ = {
+		80059F6E273F5A3900BA2C27 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = "Metal-ScreenSaver/Info.plist";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSPrincipalClass = de_Jong_Attractor_Screen_SaverView;
 				INSTALL_PATH = "$(HOME)/Library/Screen Savers";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.z-zero.day01.Metal-ScreenSaver";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "tweoss.de-Jong-Attractor-Screen-Saver";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				WRAPPER_EXTENSION = saver;
 			};
 			name = Release;
@@ -284,25 +297,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C4E8E6E8221AF9BA006DB788 /* Build configuration list for PBXProject "Metal-ScreenSaver" */ = {
+		80059F5D273F5A3900BA2C27 /* Build configuration list for PBXProject "de Jong Attractor Screen Saver" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C4E8E6F6221AF9BA006DB788 /* Debug */,
-				C4E8E6F7221AF9BA006DB788 /* Release */,
+				80059F6A273F5A3900BA2C27 /* Debug */,
+				80059F6B273F5A3900BA2C27 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C4E8E6F8221AF9BA006DB788 /* Build configuration list for PBXNativeTarget "Metal-ScreenSaver" */ = {
+		80059F6C273F5A3900BA2C27 /* Build configuration list for PBXNativeTarget "de Jong Attractor Screen Saver" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C4E8E6F9221AF9BA006DB788 /* Debug */,
-				C4E8E6FA221AF9BA006DB788 /* Release */,
+				80059F6D273F5A3900BA2C27 /* Debug */,
+				80059F6E273F5A3900BA2C27 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = C4E8E6E5221AF9BA006DB788 /* Project object */;
+	rootObject = 80059F5A273F5A3900BA2C27 /* Project object */;
 }

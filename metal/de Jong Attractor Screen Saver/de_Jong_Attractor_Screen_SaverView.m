@@ -1,12 +1,11 @@
 //
-//  Attractor_ScreenSaverView.m
-//  Metal-ScreenSaver
+//  de_Jong_Attractor_Screen_SaverView.m
+//  de Jong Attractor Screen Saver
 //
-//  Created by Antoine FEUERSTEIN on 2/18/19.
-//  Copyright © 2019 Antoine FEUERSTEIN. All rights reserved.
+//  Created by Francis Chua on 11/12/21.
 //
 
-#import "Attractor_ScreenSaverView.h"
+#import "de_Jong_Attractor_Screen_SaverView.h"
 
 @implementation Attractor_ScreenSaverView
 
@@ -28,7 +27,7 @@
         
         self->commandQueue = [self->metalView.device newCommandQueue];
         self->time = 0;
-        self->timespeed = M_PI / 360;
+        self->timespeed = M_PI / 360 / 2;
     }
     return self;
 }
@@ -47,6 +46,10 @@
     [encoder setComputePipelineState:self->computeState];
     [encoder setTexture:drawable.texture atIndex:0];
     [encoder setBytes:&self->time length:sizeof(float) atIndex:0];
+    [encoder setBytes:&self->a length:sizeof(float) atIndex:1];
+    [encoder setBytes:&self->b length:sizeof(float) atIndex:2];
+    [encoder setBytes:&self->c length:sizeof(float) atIndex:3];
+    [encoder setBytes:&self->d length:sizeof(float) atIndex:4];
     MTLSize groups = MTLSizeMake(8, 8, 1);
     MTLSize threadPerGroup = MTLSizeMake(drawable.texture.width / groups.width, drawable.texture.height / groups.height, groups.depth);
     
@@ -58,6 +61,10 @@
     
     
     self->time += self->timespeed;
+    self->a = -2.0 + sin(time);
+    self->b = -2.0 + sin(time / 120);
+    self->c = -1.2 + sin(time / 360);
+    self->d =  2.0 + sin(time / 720);
 }
 
 - (void)startAnimation
