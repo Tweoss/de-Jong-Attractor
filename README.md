@@ -1,6 +1,6 @@
 # de Jong Attractor
 
-Screensaver based off of [Mike Bostock's de Jong Attractor II](https://observablehq.com/@mbostock/de-jong-attractor-ii). 
+Mac screensaver based off of [Mike Bostock's de Jong Attractor II](https://observablehq.com/@mbostock/de-jong-attractor-ii). 
 
 The initial reimplementation in pure swift is in the pure_swift folder. It cannot handle much more than 2^13 points (on an M1 MacBook Air). 
 
