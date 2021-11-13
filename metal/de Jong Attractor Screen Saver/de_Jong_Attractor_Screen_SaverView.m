@@ -26,7 +26,7 @@
         self->computeState = [self->metalView.device newComputePipelineStateWithFunction:compute error:&error];
         
         self->commandQueue = [self->metalView.device newCommandQueue];
-        self->time = 0;
+        self->time = fmod((float) CFAbsoluteTimeGetCurrent(), 86400);
         self->timespeed = M_PI / 360 / 2;
     }
     return self;
