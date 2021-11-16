@@ -17,37 +17,6 @@ class Main: ScreenSaverView, MTKViewDelegate {
     }
     
     func draw(in view: MTKView) {
-        
-        return;
-    }
-    
-    
-    var metalView: MTKView!
-    var computeState: MTLComputePipelineState!
-    var library: MTLLibrary!
-    var commandQueue: MTLCommandQueue!
-    var time: Float = fmod(Float(CFAbsoluteTimeGetCurrent()), 86400.0)
-    var timespeed: Float = Float.pi / 360.0 / 2.0
-    var a: Float = -2.0 + sin(fmod(Float(CFAbsoluteTimeGetCurrent()), 86400.0)), b: Float = -2.0 + sin(fmod(Float(CFAbsoluteTimeGetCurrent()), 86400.0)/120), c: Float = -1.2 + sin(fmod(Float(CFAbsoluteTimeGetCurrent()), 86400.0)/360), d: Float = 2.0 + sin(fmod(Float(CFAbsoluteTimeGetCurrent()), 86400.0)/720)
-    
-    override init?(frame: NSRect, isPreview: Bool) {
-        super.init(frame: frame, isPreview: isPreview)
-        animationTimeInterval = 1/30.0
-        self.metalView = MTKView(frame: frame)
-        self.metalView.device = MTLCreateSystemDefaultDevice()
-        self.metalView.delegate = self;
-        self.addSubview(self.metalView)
-        try! self.library = self.metalView.device?.makeDefaultLibrary(bundle: Bundle(for: type(of: self)) )
-        let compute = self.library.makeFunction(name: "compute_function")
-        self.computeState = try! self.metalView.device!.makeComputePipelineState(function: compute!)
-        self.commandQueue =  self.metalView.device?.makeCommandQueue()
-    }
-    
-    required init?(coder decoder: NSCoder) {
-        super.init(coder: decoder)
-    }
-
-    override func animateOneFrame() {
         let drawable: CAMetalDrawable = self.metalView.currentDrawable!;
         let buffer: MTLCommandBuffer = self.commandQueue.makeCommandBuffer()!;
         let encoder: MTLComputeCommandEncoder = buffer.makeComputeCommandEncoder()!;
@@ -71,6 +40,37 @@ class Main: ScreenSaverView, MTKViewDelegate {
         self.b = -2.0 + sin(time / 120);
         self.c = -1.2 + sin(time / 360);
         self.d =  2.0 + sin(time / 720);
+        return;
+    }
+    
+    
+    var metalView: MTKView!
+    var computeState: MTLComputePipelineState!
+    var library: MTLLibrary!
+    var commandQueue: MTLCommandQueue!
+    var time: Float = fmod(Float(CFAbsoluteTimeGetCurrent()), 86400.0)
+    var timespeed: Float = Float.pi / 360.0 / 2.0
+    var a: Float = -2.0 + sin(fmod(Float(CFAbsoluteTimeGetCurrent()), 86400.0)), b: Float = -2.0 + sin(fmod(Float(CFAbsoluteTimeGetCurrent()), 86400.0)/120), c: Float = -1.2 + sin(fmod(Float(CFAbsoluteTimeGetCurrent()), 86400.0)/360), d: Float = 2.0 + sin(fmod(Float(CFAbsoluteTimeGetCurrent()), 86400.0)/720)
+    
+    override init?(frame: NSRect, isPreview: Bool) {
+        super.init(frame: frame, isPreview: isPreview)
+        self.animationTimeInterval = 1/30.0
+        self.metalView = MTKView(frame: frame)
+        self.metalView.device = MTLCreateSystemDefaultDevice()
+        self.metalView.delegate = self;
+        self.addSubview(self.metalView)
+        try! self.library = self.metalView.device?.makeDefaultLibrary(bundle: Bundle(for: type(of: self)) )
+        let compute = self.library.makeFunction(name: "compute_function")
+        self.computeState = try! self.metalView.device!.makeComputePipelineState(function: compute!)
+        self.commandQueue =  self.metalView.device?.makeCommandQueue()
+    }
+    
+    required init?(coder decoder: NSCoder) {
+        super.init(coder: decoder)
+    }
+
+    override func animateOneFrame() {
+        
         
     }
     

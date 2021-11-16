@@ -8,12 +8,49 @@
 #include <metal_stdlib>
 using namespace metal;
 
-#define AVERAGE_POINT_COUNT pow(2.0, 18.0)
+#define AVERAGE_POINT_COUNT pow(2.0, 17.0)
 
 struct ColoredPoint {
     float2 coord;
     float3 color;
 };
+
+float3 hsv_to_rgb(float3 hsv) {
+    float r = 0;
+    float g = 0;
+    float b = 0;
+    float h = hsv[0], s = hsv[1], v = hsv[2];
+    
+    int i = floor(h * 6);
+    float f = h * 6 - i;
+    float p = v * (1 - s);
+    float q = v * (1 - f * s);
+    float t = v * (1 - (1 - f) * s);
+    switch (i % 6) {
+        case 0: r = v, g = t, b = p; break;
+        case 1: r = q, g = v, b = p; break;
+        case 2: r = p, g = v, b = t; break;
+        case 3: r = p, g = q, b = v; break;
+        case 4: r = t, g = p, b = v; break;
+        case 5: r = v, g = p, b = q; break;
+    }
+ 
+    return float3(r,g,b);
+}
+
+float atan_expanded(float y, float x) {
+    if (x > 0) {
+        return atan(y / x);
+    } else if (y > 0) {
+        return M_PI_2_F - atan(x / y);
+    } else if (y < 0) {
+        return -M_PI_2_F - atan(x / y);
+    } else if (x < 0) {
+        return atan(y / x) + M_PI_F;
+    } else {
+        return NAN;
+    }
+}
 
 static ColoredPoint transformPoint(float p_x, float p_y, float a, float b, float c, float d, float width, float height) {
     float x1 = p_x;
@@ -26,7 +63,8 @@ static ColoredPoint transformPoint(float p_x, float p_y, float a, float b, float
         y2 = sin(c * x1) - cos(d * y1);
     }
     float2 coord = float2(x2 / 2.0, y2 / 2.0);
-    return ColoredPoint {coord, float3(p_x / width, 0.0, p_y / height)};
+    float hue = atan_expanded(y2, x2) / 2 / M_PI_F + 0.5;
+    return ColoredPoint {coord, hsv_to_rgb(float3(hue, 1.0, 1.0))};
 }
 
 unsigned int hash(unsigned int x) {
@@ -38,13 +76,14 @@ unsigned int hash(unsigned int x) {
 
 kernel void compute_function(texture2d<float, access::write> texture [[texture(0)]], uint2 gid [[thread_position_in_grid]], device const float &time [[buffer(0)]], device const float &a [[buffer(1)]], device const float &b [[buffer(2)]], device const float &c [[buffer(3)]], device const float &d [[buffer(4)]]) {
     texture.write(float4(0.0, 0.0, 0.0, 0.0), gid);
+
     if (
         float(hash(hash(gid.x) ^ gid.y >> 1)) / float(UINT_MAX)
         <
         AVERAGE_POINT_COUNT / (texture.get_height() * texture.get_width())
         ) {
-           
-            ColoredPoint color_point = transformPoint(gid.x, gid.y, a, b, c, d, texture.get_width(), texture.get_height());
+
+            ColoredPoint color_point = transformPoint(float(gid.x), float(gid.y), a, b, c, d, texture.get_width(), texture.get_height());
 
             float opacity = 1.0;
             uint x = color_point.coord[0] / 3 * texture.get_width() + texture.get_width() / 2;
