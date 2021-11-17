@@ -63,7 +63,7 @@ static ColoredPoint transformPoint(float p_x, float p_y, float a, float b, float
         y2 = sin(c * x1) - cos(d * y1);
     }
     float2 coord = float2(x2 / 2.0, y2 / 2.0);
-    float hue = (atan_expanded(y2, x2) + fmod(time, 2 * M_PI_F)) / 2 / M_PI_F  + 0.5;
+    float hue = atan_expanded(y2, x2) / 2 / M_PI_F +  fmod(time, 2 ) / 2 + 0.5;
     return ColoredPoint {coord, hsv_to_rgb(float3(hue, 1.0, 1.0))};
 }
 
