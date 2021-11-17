@@ -34,7 +34,7 @@ float3 hsv_to_rgb(float3 hsv) {
         case 4: r = t, g = p, b = v; break;
         case 5: r = v, g = p, b = q; break;
     }
- 
+    
     return float3(r,g,b);
 }
 
@@ -52,7 +52,7 @@ float atan_expanded(float y, float x) {
     }
 }
 
-static ColoredPoint transformPoint(float p_x, float p_y, float a, float b, float c, float d, float width, float height) {
+static ColoredPoint transformPoint(float p_x, float p_y, float a, float b, float c, float d, float width, float height, float time) {
     float x1 = p_x;
     float y1 = p_y;
     float x2 = x1;
@@ -63,7 +63,7 @@ static ColoredPoint transformPoint(float p_x, float p_y, float a, float b, float
         y2 = sin(c * x1) - cos(d * y1);
     }
     float2 coord = float2(x2 / 2.0, y2 / 2.0);
-    float hue = atan_expanded(y2, x2) / 2 / M_PI_F + 0.5;
+    float hue = (atan_expanded(y2, x2) + fmod(time, 2 * M_PI_F)) / 2 / M_PI_F  + 0.5;
     return ColoredPoint {coord, hsv_to_rgb(float3(hue, 1.0, 1.0))};
 }
 
@@ -76,15 +76,15 @@ unsigned int hash(unsigned int x) {
 
 kernel void compute_function(texture2d<float, access::write> texture [[texture(0)]], uint2 gid [[thread_position_in_grid]], device const float &time [[buffer(0)]], device const float &a [[buffer(1)]], device const float &b [[buffer(2)]], device const float &c [[buffer(3)]], device const float &d [[buffer(4)]]) {
     texture.write(float4(0.0, 0.0, 0.0, 0.0), gid);
-
+    
     if (
         float(hash(hash(gid.x) ^ gid.y >> 1)) / float(UINT_MAX)
         <
         AVERAGE_POINT_COUNT / (texture.get_height() * texture.get_width())
         ) {
-
-            ColoredPoint color_point = transformPoint(float(gid.x), float(gid.y), a, b, c, d, texture.get_width(), texture.get_height());
-
+            
+            ColoredPoint color_point = transformPoint(float(gid.x), float(gid.y), a, b, c, d, texture.get_width(), texture.get_height(), time);
+            
             float opacity = 1.0;
             uint x = color_point.coord[0] / 3 * texture.get_width() + texture.get_width() / 2;
             uint y = color_point.coord[1] / 3 * texture.get_height() + texture.get_height() / 2;
