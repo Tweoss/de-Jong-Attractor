@@ -10,6 +10,11 @@ using namespace metal;
 
 #define AVERAGE_POINT_COUNT pow(2.0, 17.0)
 
+struct Point {
+    float2 coord;
+};
+
+
 struct ColoredPoint {
     float2 coord;
     float3 color;
@@ -63,7 +68,7 @@ static ColoredPoint transformPoint(float p_x, float p_y, float a, float b, float
         y2 = sin(c * x1) - cos(d * y1);
     }
     float2 coord = float2(x2 / 2.0, y2 / 2.0);
-    float hue = atan_expanded(y2, x2) / 2 / M_PI_F +  fmod(time, 2 ) / 2 + 0.5;
+    float hue = atan_expanded(p_y, p_x) / 2 / M_PI_F;// +  fmod(time, 2 ) / 2 + 0.5;
     return ColoredPoint {coord, hsv_to_rgb(float3(hue, 1.0, 1.0))};
 }
 
@@ -103,7 +108,7 @@ struct Vertex {
 
 kernel void transform_function(
                                texture2d<float, access::write> texture [[texture(0)]],
-                               device ColoredPoint *buffer [[ buffer(0) ]],
+                               device Point *buffer [[ buffer(0) ]],
                                uint2 vid [[ thread_position_in_grid ]],
                                device const float &time [[buffer(1)]], device const float &a [[buffer(2)]], device const float &b [[buffer(3)]], device const float &c [[buffer(4)]], device const float &d [[buffer(5)]]
                                )
@@ -114,7 +119,7 @@ kernel void transform_function(
     uint x = color_point.coord[0] / 3 * texture.get_width() + texture.get_width() / 2;
     uint y = color_point.coord[1] / 3 * texture.get_height() + texture.get_height() / 2;
     texture.write(float4(color_point.color, opacity), uint2(x,y));
-    buffer[vid.x] = color_point;
+    buffer[vid.x].coord = color_point.coord;
 }
 
 kernel void fill_black(
