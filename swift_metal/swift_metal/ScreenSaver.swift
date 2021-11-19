@@ -11,7 +11,7 @@ import Metal
 import MetalKit
 
 struct Constants {
-    static let POINT_COUNT: Int = Int(powf(2, 14));
+    static let POINT_COUNT: Int = Int(powf(2, 16));
 }
 
 struct Point {
@@ -33,15 +33,10 @@ class Main: ScreenSaverView, MTKViewDelegate {
         let fill_groups: MTLSize = MTLSizeMake(8,8,1);
         let fill_threadPerGroup: MTLSize = MTLSizeMake(drawable.texture.width / fill_groups.width, drawable.texture.height / fill_groups.height, fill_groups.depth);
         encoder_2.dispatchThreadgroups(fill_threadPerGroup, threadsPerThreadgroup: fill_groups);
-//        encodser_2.endEncoding();
+
+//        let dataSize = vertexData.count*MemoryLayout<Point>.stride
         
-//
-//        let encoder: MTLComputeCommandEncoder = buffer.makeComputeCommandEncoder()!;
-        let dataSize = vertexData.count*MemoryLayout<Point>.stride
-        
-        self.vertexBuffer = self.metalView.device?.makeBuffer(bytes: vertexData, length: dataSize, options: [])
-//        vertexData.withUnsafeBufferPointer { dataPtr in
-//            let rawPtr:UnsafeMutableRawPointer = UnsafeMutableRawPointer(mutating: dataPtr.baseAddress!);
+//        self.vertexBuffer = self.metalView.device?.makeBuffer(bytes: vertexData, length: dataSize, options: [])
         
         encoder_2.setComputePipelineState(self.transformState);
         encoder_2.setTexture(drawable.texture, index: 0);
@@ -51,7 +46,7 @@ class Main: ScreenSaverView, MTKViewDelegate {
         encoder_2.setBytes(&self.b, length: MemoryLayout.size(ofValue: self.b), index: 3);
         encoder_2.setBytes(&self.c, length: MemoryLayout.size(ofValue: self.c), index: 4);
         encoder_2.setBytes(&self.d, length: MemoryLayout.size(ofValue: self.d), index: 5);
-        let groups: MTLSize = MTLSizeMake(4,1,1);
+        let groups: MTLSize = MTLSizeMake(64,1,1);
         let threadPerGroup = MTLSize(width: vertexBuffer!.length / groups.width, height: 1, depth: 1);
         encoder_2.dispatchThreadgroups(threadPerGroup, threadsPerThreadgroup: groups);
         encoder_2.endEncoding();
@@ -98,6 +93,26 @@ class Main: ScreenSaverView, MTKViewDelegate {
         self.transformState = try! self.metalView.device!.makeComputePipelineState(function: transform!)
         self.commandQueue =  self.metalView.device?.makeCommandQueue()
         self.vertexData = (0..<Constants.POINT_COUNT).map { _ in Point(coord: SIMD2<Float>(Float.random(in: -1.0...1.0), Float.random(in: -1.0...1.0))) };
+
+        let dataSize = vertexData.count*MemoryLayout<Point>.stride
+        var calculatedBufferLength = UInt(dataSize);
+        let pageSize = UInt(getpagesize());
+        let pageSizeBitmask = UInt(getpagesize()) - 1;
+        
+        let bufferPtr = UnsafeMutablePointer(mutating: vertexData!);
+
+        let alignedBufferAddr = UnsafeMutableRawPointer(bitPattern: UInt(bitPattern: bufferPtr) & ~pageSizeBitmask);
+        let offset = UInt(bitPattern: bufferPtr) & pageSizeBitmask;
+
+        calculatedBufferLength += offset;
+
+        if (calculatedBufferLength & pageSizeBitmask) != 0 {
+            calculatedBufferLength &= ~(pageSize - 1)
+            calculatedBufferLength += pageSize
+        }
+
+        self.vertexBuffer = self.metalView.device!.makeBuffer(bytesNoCopy: alignedBufferAddr!, length: Int(calculatedBufferLength), options: .storageModeShared, deallocator: nil);
+      
     }
     
     required init?(coder decoder: NSCoder) {
