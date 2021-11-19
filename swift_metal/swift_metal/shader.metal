@@ -55,6 +55,28 @@ float atan_expanded(float y, float x) {
     }
 }
 
+
+float3 cubehelix(float x, float y, float z) {
+  float a = y * z * (1.0 - z);
+  float c = cos(x + M_PI_F / 2.0);
+  float s = sin(x + M_PI_F / 2.0);
+  return float3(
+    z + a * (1.78277 * s - 0.14861 * c),
+    z - a * (0.29227 * c + 0.90649 * s),
+    z + a * (1.97294 * c)
+  );
+}
+
+float3 rainbow(float t) {
+  if (t < 0.0 || t > 1.0) t -= floor(t);
+  float ts = abs(t - 0.5);
+  return cubehelix(
+    (360.0 * t - 100.0) / 180.0 * M_PI_F,
+    1.5 - 1.5 * ts,
+    0.8 - 0.9 * ts
+  );
+}
+
 static ColoredPoint transformPoint(float p_x, float p_y, float a, float b, float c, float d, float width, float height, float time) {
     float x1 = p_x;
     float y1 = p_y;
@@ -65,9 +87,10 @@ static ColoredPoint transformPoint(float p_x, float p_y, float a, float b, float
         x2 = sin(a * y1) - cos(b * x1);
         y2 = sin(c * x1) - cos(d * y1);
     }
-    float2 coord = float2(x2 / 2.0, y2 / 2.0);
-    float hue = atan_expanded(p_y, p_x) / 2 / M_PI_F;// +  fmod(time, 2 ) / 2 + 0.5;
-    return ColoredPoint {coord, hsv_to_rgb(float3(hue, 1.0, 1.0))};
+    float2 coord = float2(x2 / 5 * width + width / 2,  y2 / 5 * height + height / 2);
+    float v_t = atan2(p_y, p_x) / M_PI_F;
+    float3 color = rainbow(v_t / 4.0 + 0.25);
+    return ColoredPoint {coord, hsv_to_rgb(color)};
 }
 
 kernel void transform_function(
@@ -80,9 +103,7 @@ kernel void transform_function(
     
     ColoredPoint color_point = transformPoint(buffer[vid.x].coord.x, buffer[vid.x].coord.y, a, b, c, d, texture.get_width(), texture.get_height(), time);
     float opacity = 1.0;
-    uint x = color_point.coord[0] / 3 * texture.get_width() + texture.get_width() / 2;
-    uint y = color_point.coord[1] / 3 * texture.get_height() + texture.get_height() / 2;
-    texture.write(float4(color_point.color, opacity), uint2(x,y));
+    texture.write(float4(color_point.color, opacity), uint2(color_point.coord));
 }
 
 kernel void fill_black(
