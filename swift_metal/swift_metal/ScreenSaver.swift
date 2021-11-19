@@ -52,10 +52,10 @@ class Main: ScreenSaverView, MTKViewDelegate {
         buffer.commit();
 
         self.time += self.timespeed;
-        self.a = -2.0 + sin(time);
-        self.b = -2.0 + sin(time / 120);
-        self.c = -1.2 + sin(time / 360);
-        self.d =  2.0 + sin(time / 720);
+        self.a = -2.0 + sin(self.time * Float.pi / 200.0);
+        self.b = -2.0 + sin(self.time * Float.pi / 200.0 / 20 );
+        self.c = -1.2 + sin(self.time * Float.pi / 200.0 / 20 / 10 );
+        self.d = -2.0 + sin(self.time * Float.pi / 200.0 / 20 / 10 / 6);
         return;
     }
     
@@ -64,16 +64,17 @@ class Main: ScreenSaverView, MTKViewDelegate {
     var fillState: MTLComputePipelineState!
     var library: MTLLibrary!
     var commandQueue: MTLCommandQueue!
-    var time: Float = fmod(Float(CFAbsoluteTimeGetCurrent()), 86400.0)
-    var timespeed: Float = Float.pi / 360.0 / 2.0
-    var a: Float = -2.0 + sin(fmod(Float(CFAbsoluteTimeGetCurrent()), 86400.0)), b: Float = -2.0 + sin(fmod(Float(CFAbsoluteTimeGetCurrent()), 86400.0)/120), c: Float = -1.2 + sin(fmod(Float(CFAbsoluteTimeGetCurrent()), 86400.0)/360), d: Float = 2.0 + sin(fmod(Float(CFAbsoluteTimeGetCurrent()), 86400.0)/720)
+    var time: Float!
+    var timespeed: Float!
+    var a: Float!, b: Float!, c: Float!, d: Float!
     
     var vertexData: Array<Point>!
     var vertexBuffer: MTLBuffer!
     
     override init?(frame: NSRect, isPreview: Bool) {
         super.init(frame: frame, isPreview: isPreview)
-        self.animationTimeInterval = 1/10.0
+//         1.0 second in between frames
+        self.animationTimeInterval = 1 / 5
         self.metalView = MTKView(frame: frame)
         self.metalView.device = MTLCreateSystemDefaultDevice()
         self.metalView.delegate = self;
@@ -107,13 +108,21 @@ class Main: ScreenSaverView, MTKViewDelegate {
         }
 
         self.vertexBuffer = self.metalView.device!.makeBuffer(bytesNoCopy: alignedBufferAddr!, length: Int(calculatedBufferLength), options: .storageModeShared, deallocator: nil);
+        self.time = fmod(Float(CFAbsoluteTimeGetCurrent()), 86400.0);
+        self.timespeed = Float(0.33)
+        self.a = -2.0 + sin(self.time * Float.pi / 200.0);
+        self.b = -2.0 + sin(self.time * Float.pi / 200.0 / 10 );
+        self.c = -1.2 + sin(self.time * Float.pi / 200.0 / 10 / 10 );
+        self.d = -2.0 + sin(self.time * Float.pi / 200.0 / 10 / 10 / 6);
     }
     
     required init?(coder decoder: NSCoder) {
         super.init(coder: decoder)
+        self.animationTimeInterval = 1 / 5.0
     }
     
     override func animateOneFrame() {
+        self.animationTimeInterval = 1 / 5.0
     }
     
     func clearStage() {
