@@ -89,8 +89,8 @@ static ColoredPoint transformPoint(float p_x, float p_y, float a, float b, float
     }
     float2 coord = float2(x2 / 5 * width + width / 2,  y2 / 5 * height + height / 2);
     float v_t = atan2(p_y, p_x) / M_PI_F;
-    float3 color = rainbow(v_t / 4.0 + 0.25);
-    return ColoredPoint {coord, hsv_to_rgb(color)};
+    float3 color = rainbow(v_t / 4.0 + 0.0);
+    return ColoredPoint {coord, color};
 }
 
 kernel void transform_function(
