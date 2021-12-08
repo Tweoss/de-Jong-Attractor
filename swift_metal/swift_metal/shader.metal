@@ -8,9 +8,7 @@
 #include <metal_stdlib>
 using namespace metal;
 
-struct Point {
-    float2 coord;
-};
+#define AVERAGE_POINT_COUNT pow(2.0, 18.0)
 
 
 struct ColoredPoint {
@@ -93,27 +91,29 @@ static ColoredPoint transformPoint(float p_x, float p_y, float a, float b, float
     return ColoredPoint {coord, color};
 }
 
+unsigned int hash(unsigned int x) {
+    x = ((x >> 16) ^ x) * 0x45d9f3b;
+    x = ((x >> 16) ^ x) * 0x45d9f3b;
+    x = (x >> 16) ^ x;
+    return x;
+}
+
 kernel void transform_function(
                                texture2d<float, access::write> texture [[texture(0)]],
-                               device const Point *buffer [[ buffer(0) ]],
-                               uint2 vid [[ thread_position_in_grid ]],
+                               uint2 gid [[ thread_position_in_grid ]],
                                device const float &time [[buffer(1)]], device const float &a [[buffer(2)]], device const float &b [[buffer(3)]], device const float &c [[buffer(4)]], device const float &d [[buffer(5)]]
                                )
 {
-    
-    ColoredPoint color_point = transformPoint(buffer[vid.x].coord.x, buffer[vid.x].coord.y, a, b, c, d, texture.get_width(), texture.get_height(), time);
-    float opacity = 1.0;
-    texture.write(float4(color_point.color, opacity), uint2(color_point.coord));
-}
-
-kernel void fill_black(
-                       texture2d<float, access::write> texture [[texture(0)]]
-                       , uint2 gid [[thread_position_in_grid]]
-                       )
-{
-    
     texture.write(float4(0.0, 0.0, 0.0, 0.0), gid);
+
+    if (
+            float(hash(hash(gid.x) ^ gid.y >> 1)) / float(UINT_MAX)
+            <
+            AVERAGE_POINT_COUNT / (texture.get_height() * texture.get_width())
+            ) {
+                ColoredPoint color_point = transformPoint(gid.x * 2.0 / texture.get_width() - 1.0, gid.y * 2.0 / texture.get_height() - 1.0, a, b, c, d, texture.get_width(), texture.get_height(), time);
+                texture.write(float4(color_point.color, 1.0), uint2(color_point.coord));
+            }
+    
 }
-
-
 
