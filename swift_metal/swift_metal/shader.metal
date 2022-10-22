@@ -55,24 +55,24 @@ float atan_expanded(float y, float x) {
 
 
 float3 cubehelix(float x, float y, float z) {
-  float a = y * z * (1.0 - z);
-  float c = cos(x + M_PI_F / 2.0);
-  float s = sin(x + M_PI_F / 2.0);
-  return float3(
-    z + a * (1.78277 * s - 0.14861 * c),
-    z - a * (0.29227 * c + 0.90649 * s),
-    z + a * (1.97294 * c)
-  );
+    float a = y * z * (1.0 - z);
+    float c = cos(x + M_PI_F / 2.0);
+    float s = sin(x + M_PI_F / 2.0);
+    return float3(
+                  z + a * (1.78277 * s - 0.14861 * c),
+                  z - a * (0.29227 * c + 0.90649 * s),
+                  z + a * (1.97294 * c)
+                  );
 }
 
 float3 rainbow(float t) {
-  if (t < 0.0 || t > 1.0) t -= floor(t);
-  float ts = abs(t - 0.5);
-  return cubehelix(
-    (360.0 * t - 100.0) / 180.0 * M_PI_F,
-    1.5 - 1.5 * ts,
-    0.8 - 0.9 * ts
-  );
+    if (t < 0.0 || t > 1.0) t -= floor(t);
+    float ts = abs(t - 0.5);
+    return cubehelix(
+                     (360.0 * t - 100.0) / 180.0 * M_PI_F,
+                     1.5 - 1.5 * ts,
+                     0.8 - 0.9 * ts
+                     );
 }
 
 static ColoredPoint transformPoint(float p_x, float p_y, float a, float b, float c, float d, float width, float height, float time) {
@@ -80,7 +80,7 @@ static ColoredPoint transformPoint(float p_x, float p_y, float a, float b, float
     float y1 = p_y;
     float x2 = x1;
     float y2 = y1;
-    for (int i = 0; i < 8; i ++) {
+    for (int i = 0; i < 7; i ++) {
         x1 = x2; y1 = y2;
         x2 = sin(a * y1) - cos(b * x1);
         y2 = sin(c * x1) - cos(d * y1);
@@ -98,22 +98,26 @@ unsigned int hash(unsigned int x) {
     return x;
 }
 
+//float random( float2 p )
+//{
+//    float2 K1 = float2(
+//        23.14069263277926, // e^pi (Gelfond's constant)
+//         2.665144142690225 // 2^sqrt(2) (Gelfondâ€“Schneider constant)
+//    );
+//    return fract( cos( dot(p,K1) ) * 12345.6789 );
+//}
+
 kernel void transform_function(
                                texture2d<float, access::write> texture [[texture(0)]],
                                uint2 gid [[ thread_position_in_grid ]],
                                device const float &time [[buffer(1)]], device const float &a [[buffer(2)]], device const float &b [[buffer(3)]], device const float &c [[buffer(4)]], device const float &d [[buffer(5)]]
                                )
 {
-    texture.write(float4(0.0, 0.0, 0.0, 0.0), gid);
-
     if (
-            float(hash(hash(gid.x) ^ gid.y >> 1)) / float(UINT_MAX)
-            <
-            AVERAGE_POINT_COUNT / (texture.get_height() * texture.get_width())
-            ) {
-                ColoredPoint color_point = transformPoint(gid.x * 2.0 / texture.get_width() - 1.0, gid.y * 2.0 / texture.get_height() - 1.0, a, b, c, d, texture.get_width(), texture.get_height(), time);
-                texture.write(float4(color_point.color, 1.0), uint2(color_point.coord));
-            }
-    
+        ((gid.x & 0b1) ^ (gid.y & 0b11)) == 0
+        ) {
+            ColoredPoint color_point = transformPoint(gid.x * 2.0 / texture.get_width() - 1.0, gid.y * 2.0 / texture.get_height() - 1.0, a, b, c, d, texture.get_width(), texture.get_height(), time);
+            texture.write(float4(color_point.color, 1.0), uint2(color_point.coord));
+        }
 }
 
