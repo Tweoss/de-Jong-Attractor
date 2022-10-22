@@ -16,8 +16,16 @@ class Main: ScreenSaverView, MTKViewDelegate {
     }
     
     func draw(in view: MTKView) {
+        
         let drawable: CAMetalDrawable = self.metalView.currentDrawable!;
         let buffer: MTLCommandBuffer = self.commandQueue.makeCommandBuffer()!;
+        
+        let region = MTLRegion(origin: MTLOrigin(x: 0, y: 0, z: 0), size: MTLSize(width: drawable.texture.width, height: drawable.texture.height, depth: 1));
+        if (self.pixelData.count < drawable.texture.width * drawable.texture.height) {
+            self.pixelData = Array(repeating: 0, count: drawable.texture.width * drawable.texture.height);
+        }
+        
+        drawable.texture.replace(region: region, mipmapLevel: 0, withBytes: self.pixelData, bytesPerRow: 4 * drawable.texture.width)
         
         let encoder: MTLComputeCommandEncoder = buffer.makeComputeCommandEncoder()!;
         
@@ -51,6 +59,7 @@ class Main: ScreenSaverView, MTKViewDelegate {
     var time: Float!
     var timespeed: Float!
     var a: Float!, b: Float!, c: Float!, d: Float!
+    var pixelData: Array<UInt8>!
     
     override init?(frame: NSRect, isPreview: Bool) {
         super.init(frame: frame, isPreview: isPreview)
@@ -69,6 +78,7 @@ class Main: ScreenSaverView, MTKViewDelegate {
         self.b = -1.0 + sin(self.time * Float.pi / 200.0 / 10 );
         self.c = -1.2 + sin(self.time * Float.pi / 200.0 / 10 / 10 );
         self.d = -2.0 + sin(self.time * Float.pi / 200.0 / 10 / 10 / 6);
+        self.pixelData = Array(repeating: 0, count: 2560 * 1664);
     }
     
     required init?(coder decoder: NSCoder) {
@@ -81,7 +91,4 @@ class Main: ScreenSaverView, MTKViewDelegate {
     func clearStage() {
     }
     
-    
-    override func draw(_ rect: NSRect) {
-    }
 }
