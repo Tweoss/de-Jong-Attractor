@@ -16,16 +16,10 @@ class Main: ScreenSaverView, MTKViewDelegate {
     }
     
     func draw(in view: MTKView) {
-        
         let drawable: CAMetalDrawable = self.metalView.currentDrawable!;
         let buffer: MTLCommandBuffer = self.commandQueue.makeCommandBuffer()!;
         
         let region = MTLRegion(origin: MTLOrigin(x: 0, y: 0, z: 0), size: MTLSize(width: drawable.texture.width, height: drawable.texture.height, depth: 1));
-        if (self.pixelData.count < drawable.texture.width * drawable.texture.height) {
-            self.pixelData = Array(repeating: 0, count: drawable.texture.width * drawable.texture.height);
-        }
-        
-        drawable.texture.replace(region: region, mipmapLevel: 0, withBytes: self.pixelData, bytesPerRow: 4 * drawable.texture.width)
         
         let encoder: MTLComputeCommandEncoder = buffer.makeComputeCommandEncoder()!;
         
@@ -41,14 +35,20 @@ class Main: ScreenSaverView, MTKViewDelegate {
         encoder.dispatchThreadgroups(threadPerGroup, threadsPerThreadgroup: groups);
         encoder.endEncoding();
         
+        if (self.pixelData.count != drawable.texture.width * drawable.texture.height * 4) {
+            self.pixelData = Array(repeating: UInt8(0), count: drawable.texture.width * drawable.texture.height * 4);
+        }
+        
+        drawable.texture.replace(region: region, mipmapLevel: 0, withBytes: self.pixelData, bytesPerRow: 4 * drawable.texture.width)
+        
         buffer.present(drawable);
         buffer.commit();
 
         self.time += self.timespeed;
-        self.a = -2.0 + sin(self.time * Float.pi / 200.0);
-        self.b = -2.0 + sin(self.time * Float.pi / 200.0 / 20 );
-        self.c = -1.2 + sin(self.time * Float.pi / 200.0 / 20 / 10 );
-        self.d = -2.0 + sin(self.time * Float.pi / 200.0 / 20 / 10 / 6);
+        self.a = -2.0 + sin(self.time * 2.0 * Float.pi / 20.0);
+        self.b = -1.0 + sin(self.time * 2.0 * Float.pi / 60.0);
+        self.c = -1.2 + sin(self.time * 2.0 * Float.pi / 120.0);
+        self.d = -2.0 + sin(self.time * 2.0 * Float.pi / 240.0);
         return;
     }
     
@@ -63,6 +63,7 @@ class Main: ScreenSaverView, MTKViewDelegate {
     
     override init?(frame: NSRect, isPreview: Bool) {
         super.init(frame: frame, isPreview: isPreview)
+        self.animationTimeInterval = TimeInterval(1.0 / 60.0);
         self.metalView = MTKView(frame: frame)
         self.metalView.device = MTLCreateSystemDefaultDevice()
         self.metalView.delegate = self;
@@ -71,13 +72,13 @@ class Main: ScreenSaverView, MTKViewDelegate {
         let transform = self.library.makeFunction(name: "transform_function")
         self.transformState = try! self.metalView.device!.makeComputePipelineState(function: transform!)
         self.commandQueue =  self.metalView.device?.makeCommandQueue()
-
-        self.time = fmod(Float(CFAbsoluteTimeGetCurrent()), 86400.0);
-        self.timespeed = Float(0.33)
-        self.a = sin(self.time * Float.pi / 200.0);
-        self.b = -1.0 + sin(self.time * Float.pi / 200.0 / 10 );
-        self.c = -1.2 + sin(self.time * Float.pi / 200.0 / 10 / 10 );
-        self.d = -2.0 + sin(self.time * Float.pi / 200.0 / 10 / 10 / 6);
+        
+        self.time = Float(CFAbsoluteTimeGetCurrent()).truncatingRemainder(dividingBy: (60.0 * 60.0 * 24.0));
+        self.timespeed = Float(1.0 / 60.0)
+        self.a = -2.0 + sin(self.time * 2.0 * Float.pi / 20.0);
+        self.b = -1.0 + sin(self.time * 2.0 * Float.pi / 60.0);
+        self.c = -1.2 + sin(self.time * 2.0 * Float.pi / 120.0);
+        self.d = -2.0 + sin(self.time * 2.0 * Float.pi / 240.0);
         self.pixelData = Array(repeating: 0, count: 2560 * 1664);
     }
     

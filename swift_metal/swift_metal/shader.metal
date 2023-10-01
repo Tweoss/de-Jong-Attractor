@@ -80,23 +80,27 @@ static ColoredPoint transformPoint(float p_x, float p_y, float a, float b, float
     float y1 = p_y;
     float x2 = x1;
     float y2 = y1;
-    for (int i = 0; i < 7; i ++) {
+    for (int i = 0; i < 3; i ++) {
         x1 = x2; y1 = y2;
         x2 = sin(a * y1) - cos(b * x1);
         y2 = sin(c * x1) - cos(d * y1);
     }
     float2 coord = float2(x2 / 5 * width + width / 2,  y2 / 5 * height + height / 2);
+
+//    float2 coord = float2(width / 2, height / 2);
     float v_t = atan2(p_y, p_x) / M_PI_F;
     float3 color = rainbow(v_t / 4.0 + 0.0);
+//    float3 color = float3(222.0 ,  184.0    ,190.0    );
+//    float3 color = float3(255.0 , 0.0, 0.0);
     return ColoredPoint {coord, color};
 }
-//
-//unsigned int hash(unsigned int x) {
-//    x = ((x >> 16) ^ x) * 0x45d9f3b;
-//    x = ((x >> 16) ^ x) * 0x45d9f3b;
-//    x = (x >> 16) ^ x;
-//    return x;
-//}
+
+unsigned int hash(unsigned int x) {
+    x = ((x >> 16) ^ x) * 0x45d9f3b;
+    x = ((x >> 16) ^ x) * 0x45d9f3b;
+    x = (x >> 16) ^ x;
+    return x;
+}
 
 kernel void transform_function(
                                texture2d<float, access::write> texture [[texture(0)]],
@@ -104,17 +108,13 @@ kernel void transform_function(
                                device const float &time [[buffer(1)]], device const float &a [[buffer(2)]], device const float &b [[buffer(3)]], device const float &c [[buffer(4)]], device const float &d [[buffer(5)]]
                                )
 {
-//    texture.write(float4(0.0, 0.0, 0.0, 0.0), gid);
-
+    unsigned int result = ((hash(gid.x ^ hash(gid.y)))) & 0b11111;
     if (
-//
-        ((gid.x & 0b1) ^ (gid.y & 0b1))
-//        ((gid.x & 0b1) ^ (gid.y & 0b11)) == 0
+        result == 0b11100 || result == 0b11101 || result == 0b11110
             ) {
                 float width = texture.get_width(), height = texture.get_height();
                 ColoredPoint color_point = transformPoint(gid.x * 2.0 / width - 1.0, gid.y * 2.0 / height - 1.0, a, b, c, d, width, height, time);
                 texture.write(float4(color_point.color, 1.0), uint2(color_point.coord));
             }
-    
 }
 
